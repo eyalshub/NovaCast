@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Movie / Media temp files
+*.mp4
+*.wav
+*.mp3
+*.avi
+*.mov
+
+# Pexels cache
+pexels_cache/
+
+# FFmpeg or generated clips
+generated_clips/
+output/
+renders/
+
+# Local configs
+.env
+*.env
+
+
+
+.venv/
+venv/
+*/.venv/
+*/venv/
+novacast/.venv/

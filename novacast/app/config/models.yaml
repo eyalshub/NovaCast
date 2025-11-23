@@ -1,0 +1,103 @@
+models:
+  - name: Asset
+    description: Represents a media asset in the system.
+    fields:
+      - name: id
+        type: string
+        required: true
+      - name: title
+        type: string
+        required: true
+      - name: url
+        type: string
+        required: true
+      - name: created_at
+        type: datetime
+        required: true
+      - name: updated_at
+        type: datetime
+        required: false
+
+  - name: Schedule
+    description: Represents a scheduled task in the system.
+    fields:
+      - name: id
+        type: string
+        required: true
+      - name: task_name
+        type: string
+        required: true
+      - name: cron_expression
+        type: string
+        required: true
+      - name: next_run
+        type: datetime
+        required: true
+      - name: created_at
+        type: datetime
+        required: true
+      - name: updated_at
+        type: datetime
+        required: false
+
+  - name: Prompt
+    description: Represents a prompt used in the chatbot.
+    fields:
+      - name: id
+        type: string
+        required: true
+      - name: content
+        type: string
+        required: true
+      - name: version
+        type: string
+        required: true
+      - name: experiment_flag
+        type: boolean
+        required: false
+      - name: created_at
+        type: datetime
+        required: true
+      - name: updated_at
+        type: datetime
+        required: false
+
+  - name: ChatSession
+    description: Represents a chat session in the system.
+    fields:
+      - name: id
+        type: string
+        required: true
+      - name: user_id
+        type: string
+        required: true
+      - name: messages
+        type: array
+        items:
+          type: string
+        required: true
+      - name: created_at
+        type: datetime
+        required: true
+      - name: updated_at
+        type: datetime
+        required: false
+
+  - name: JobLog
+    description: Represents a log entry for a job processed in the system.
+    fields:
+      - name: id
+        type: string
+        required: true
+      - name: job_type
+        type: string
+        required: true
+      - name: status
+        type: string
+        required: true
+      - name: created_at
+        type: datetime
+        required: true
+      - name: updated_at
+        type: datetime
+        required: false

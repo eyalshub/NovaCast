@@ -1,0 +1,67 @@
+# --- FastAPI Backend ---
+fastapi
+uvicorn
+motor
+pydantic
+python-dotenv
+requests
+httpx
+websockets
+aiohttp
+
+# --- LLM Orchestration ---
+langchain
+langchain-community
+ollama
+openai
+anthropic
+together
+
+# --- Video / Audio ---
+moviepy
+ffmpeg-python
+pydub
+
+
+# --- TTS Engines ---
+TTS 
+# Optional:
+# piper-tts
+# bark
+
+# --- Computer Vision (optional) ---
+opencv-python
+mediapipe
+scikit-image
+
+# --- Data / Memory / Vector DB ---
+faiss-cpu
+chromadb
+
+# --- Task Scheduling / Workers ---
+schedule
+dramatiq
+redis
+
+# --- Monitoring / Observability ---
+prometheus-client
+opentelemetry-api
+opentelemetry-sdk
+opentelemetry-instrumentation
+
+# --- Cloud Storage / API Access ---
+boto3
+google-cloud-storage
+beautifulsoup4
+
+# --- YAML / JSON / Schema ---
+pyyaml
+jsonschema
+
+# --- Testing ---
+pytest
+pytest-asyncio
+pytest-cov
+
+# --- Dev Tools ---
+pre-commit

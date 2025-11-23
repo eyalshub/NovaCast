@@ -1,0 +1,243 @@
+NOVACAST/
+
+├── app/
+
+│   ├── main.py                          # FastAPI app + lifespan (DB/Telemetry/Worker init)
+
+│   │
+
+│   ├── api/
+
+│   │   ├── deps/auth.py                 # JWT/OAuth2 + RBAC + MFA + API keys
+
+│   │   └── v1/
+
+│   │       ├── health.py                # Health + Readiness + Liveness probes
+
+│   │       ├── chatbot.py               # REST/WS Chat + Streaming
+
+│   │       ├── media.py                 # Script→TTS→Video→Publish pipeline trigger
+
+│   │       ├── schedules.py             # CRUD + advanced recurrence rules
+
+│   │       ├── assets.py                # CRUD + signed URLs (S3/GCS)
+
+│   │       ├── prompts.py               # CRUD + version pinning + experiment flags
+
+│   │       └── models_map.py            # Manage models.yaml + A/B model selection
+
+│   │
+
+│   ├── core/
+
+│   │   ├── orchestrator.py              # Main brain: plan→dispatch→monitor
+
+│   │   └── flow/
+
+│   │       ├── intent.py                # User intent classification
+
+│   │       └── planner.py               # DSL for Plans/Steps + validation engine
+
+│   │
+
+│   ├── agents/
+
+│   │   ├── ideation_agent.py
+
+│   │   ├── outline_agent.py
+
+│   │   ├── script_agent.py
+
+│   │   ├── rewrite_agent.py
+
+│   │   └── scene_describer_agent.py
+
+│   │
+
+│   ├── prompt_agent/
+
+│   │   ├── loader.py
+
+│   │   ├── registry.py
+
+│   │   ├── validators.py
+
+│   │   └── types.py                     # JSONSchema enforced prompt contracts
+
+│   │
+
+│   ├── chatbot/
+
+│   │   ├── session.py                   # Session state + vector memory
+
+│   │   ├── middleware.py                # rate-limit + safe-content + policy.yaml
+
+│   │   ├── tools.py                     # wiki/search/YouTube API connectors
+
+│   │   └── pipelines.py
+
+│   │
+
+│   ├── media/
+
+│   │   ├── tts_engine.py                # Multi-engine adapter (Coqui, ElevenLabs, Piper)
+
+│   │   ├── video_builder.py             # FFmpeg/Pydub wrapper + template system
+
+│   │   └── publisher.py                 # YouTube/TikTok/Twitter adapters
+
+│   │
+
+│   ├── db/
+
+│   │   ├── connection.py                # Motor init + retry + connection pool
+
+│   │   ├── models/
+
+│   │   │   ├── asset.py
+
+│   │   │   ├── schedule.py
+
+│   │   │   ├── prompt.py
+
+│   │   │   ├── chat_session.py
+
+│   │   │   └── job_log.py
+
+│   │   └── crud/
+
+│   │       ├── assets.py
+
+│   │       ├── schedules.py
+
+│   │       ├── prompts.py
+
+│   │       ├── chat_sessions.py
+
+│   │       └── job_logs.py
+
+│   │
+
+│   ├── services/
+
+│   │   ├── llm/
+
+│   │   │   ├── base.py
+
+│   │   │   ├── ollama_adapter.py
+
+│   │   │   ├── openai_adapter.py
+
+│   │   │   ├── anthropic_adapter.py      # add redundancy
+
+│   │   │   └── factory.py
+
+│   │   ├── vectorstore/                 # FAISS/Chroma + embeddings utils
+
+│   │   ├── scheduler.py                 # APScheduler + distributed locks
+
+│   │   ├── worker/
+
+│   │   │   ├── queue.py                 # Dramatiq/RabbitMQ/Kafka (idempotent jobs)
+
+│   │   │   └── tasks.py                 # render_tts/render_video/upload/notify
+
+│   │   └── telemetry/
+
+│   │       ├── metrics.py               # Prometheus + custom counters
+
+│   │       └── tracing.py               # OpenTelemetry + context propagation
+
+│   │
+
+│   ├── config/
+
+│   │   ├── settings.py                  # Pydantic Settings + Secrets Manager
+
+│   │   ├── models.yaml
+
+│   │   └── policy.yaml                  # Content Safety + moderation rules
+
+│   │
+
+│   └── utils/
+
+│       ├── schema.py
+
+│       ├── logging.py                   # JSON logs + trace IDs
+
+│       ├── errors.py
+
+│       └── retry.py                     # exponential backoff + jitter
+
+│
+
+├── storage/                             # Local mount / ephemeral
+
+│   ├── assets/
+
+│   ├── tmp/
+
+│   └── logs/
+
+│
+
+├── infra/                               # ✅ IaC for cloud deployment
+
+│   ├── k8s/                             # Helm charts / manifests
+
+│   ├── terraform/                       # Optional infra provisioning
+
+│   └── github-actions/                  # CI/CD workflows
+
+│
+
+├── tests/
+
+│   ├── mocks/                           # Mock LLM/TTS/FFmpeg/Publisher
+
+│   ├── perf/                            # Load/soak tests
+
+│   ├── test_health.py
+
+│   ├── test_crud_assets.py
+
+│   ├── test_crud_schedules.py
+
+│   ├── test_prompt_registry.py
+
+│   ├── test_chatbot_intents.py
+
+│   └── test_end_to_end_pipeline.py
+
+│
+
+├── scripts/
+
+│   └── run_local_pipeline.py
+
+│
+
+├── docker/
+
+│   ├── Dockerfile.api
+
+│   ├── Dockerfile.worker
+
+│   ├── nginx.conf
+
+│   └── Dockerfile.e2e                   # test container
+
+│
+
+├── docker-compose.yml
+
+├── Makefile
+
+├── .env.example
+
+├── .pre-commit-config.yaml
+
+├── README.md
+
+└── requirements.txt

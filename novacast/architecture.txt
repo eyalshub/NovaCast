@@ -1,0 +1,167 @@
+NOVACAST/
+├── app/
+│   ├── main.py                              # FastAPI app + lifespan (DB/Telemetry/Worker init)
+│   │
+│   ├── api/
+│   │   ├── deps/auth.py                     # JWT/OAuth2 + RBAC + MFA + API keys
+│   │   └── v1/
+│   │       ├── health.py                    # Health + Readiness + Liveness probes
+│   │       ├── chatbot.py                   # REST/WS Chat + Streaming
+│   │       ├── media.py                     # Script→TTS→Video→Publish pipeline trigger
+│   │       ├── schedules.py                 # CRUD + advanced recurrence rules
+│   │       ├── assets.py                    # CRUD + signed URLs (S3/GCS)
+│   │       ├── prompts.py                   # CRUD + version pinning + experiment flags
+│   │       └── models_map.py                # Manage models.yaml + A/B model selection
+│   │
+│   ├── core/
+│   │   ├── orchestrator.py                  # Main brain: plan→dispatch→monitor
+│   │   └── flow/
+│   │       ├── intent.py                    # User intent classification
+│   │       └── planner.py                   # DSL for Plans/Steps + validation engine
+│   │
+│   ├── agents/
+│   │   ├── base_agent.py                    # common agent base (prompt load + render + run)
+│   │   ├── types.py                         # Pydantic I/O models for agents
+│   │   ├── ideation_agent.py
+│   │   ├── outline_agent.py
+│   │   ├── script_agent.py
+│   │   ├── rewrite_agent.py
+│   │   ├── scene_describer_agent.py
+│   │   ├── tts_aggregator_agent.py          # chooses voice/speed/pauses plan
+│   │   ├── tts_synthesis_agent.py           # produces WAV/MP3 from script/voice plan
+│   │   ├── video_assembly_agent.py          # composes layers (bg, audio, subtitles, media)
+│   │   ├── publisher_agent.py               # uploads/exports; returns URLs/IDs
+│   │   └── qc_review_agent.py               # duration/format checks + basic QA rules
+│   │
+│   ├── prompt_agent/
+│   │   ├── loader.py
+│   │   ├── registry.py
+│   │   ├── validators.py
+│   │   └── types.py                         # JSONSchema enforced prompt contracts
+│   │
+│   ├── chatbot/
+│   │   ├── session.py                       # Session state + vector memory
+│   │   ├── middleware.py                    # rate-limit + safe-content + policy.yaml
+│   │   ├── tools.py                         # wiki/search/YouTube API connectors
+│   │   └── pipelines.py
+│   │
+│   ├── media/
+│   │   ├── tts_engine.py                    # Multi-engine adapter (Coqui/ElevenLabs/Piper)
+│   │   ├── video_builder.py                 # FFmpeg/Pydub wrapper + template system
+│   │   ├── subtitles.py                     # SRT/VTT generation + alignment helpers
+│   │   └── publisher.py                     # YouTube/TikTok/Twitter adapters
+│   │
+│   ├── services/
+│   │   ├── llm/
+│   │   │   ├── base.py
+│   │   │   ├── ollama_adapter.py
+│   │   │   ├── openai_adapter.py
+│   │   │   ├── anthropic_adapter.py         # add redundancy
+│   │   │   └── factory.py                   # get_llm(provider, model) router
+│   │   ├── vectorstore/                     # FAISS/Chroma + embeddings utils
+│   │   ├── scheduler.py                     # APScheduler + distributed locks
+│   │   ├── worker/
+│   │   │   ├── queue.py                     # Dramatiq/RabbitMQ/Kafka (idempotent jobs)
+│   │   │   └── tasks.py                     # render_tts / render_video / upload / notify
+│   │   └── telemetry/
+│   │       ├── metrics.py                   # Prometheus + custom counters
+│   │       └── tracing.py                   # OpenTelemetry + context propagation
+│   │
+│   ├── db/
+│   │   ├── connection.py                    # Motor init + retry + connection pool
+│   │   ├── models/
+│   │   │   ├── asset.py
+│   │   │   ├── schedule.py
+│   │   │   ├── prompt.py
+│   │   │   ├── chat_session.py
+│   │   │   └── job_log.py
+│   │   └── crud/
+│   │       ├── assets.py
+│   │       ├── schedules.py
+│   │       ├── prompts.py
+│   │       ├── chat_sessions.py
+│   │       └── job_logs.py
+│   │
+│   ├── config/
+│   │   ├── settings.py                      # Pydantic Settings + Secrets Manager
+│   │   ├── models.yaml                      # routing per agent (provider/model)
+│   │   ├── experiments.yaml                 # feature flags / A-B per prompt-model
+│   │   └── policy.yaml                      # Content Safety + moderation rules
+│   │
+│   └── utils/
+│       ├── prompt_loader.py                 # YAML loader for prompts
+│       ├── schema.py
+│       ├── files.py                         # safe filenames/dirs + storage helpers
+│       ├── srt.py                           # SRT/VTT helpers (split/merge/timestamps)
+│       ├── cache.py                         # memoize results (hash-based)
+│       ├── vault.py                         # secrets abstraction over .env
+│       ├── logging.py                       # JSON logs + trace IDs
+│       ├── errors.py
+│       └── retry.py                         # exponential backoff + jitter
+│
+├── prompts/                                 # one YAML per agent
+│   ├── ideation_agent.yaml
+│   ├── outline_agent.yaml
+│   ├── script_agent.yaml
+│   ├── rewrite_agent.yaml
+│   ├── scene_describer_agent.yaml
+│   ├── tts_aggregator_agent.yaml
+│   ├── tts_synthesis_agent.yaml
+│   ├── qc_review_agent.yaml
+│   ├── publisher_agent.yaml
+│   └── _templates/
+│       ├── README.md                        # prompt conventions & style guide
+│       └── generic_agent.yaml               # system/user_template skeleton
+│
+├── storage/                                 # Local mount / ephemeral
+│   ├── assets/
+│   ├── tmp/
+│   └── logs/
+│
+├── infra/                                   # ✅ IaC for cloud deployment
+│   ├── k8s/                                 # Helm charts / manifests
+│   ├── terraform/                           # Optional infra provisioning
+│   └── github-actions/                      # CI/CD workflows
+│
+├── tests/
+│   ├── mocks/                               # Mock LLM/TTS/FFmpeg/Publisher
+│   │   ├── mock_llm.py
+│   │   ├── mock_tts.py
+│   │   └── mock_video.py
+│   ├── perf/                                # Load/soak tests
+│   ├── agents/
+│   │   ├── test_ideation_agent.py
+│   │   ├── test_outline_agent.py
+│   │   ├── test_script_agent.py
+│   │   ├── test_tts_agents.py
+│   │   └── test_video_assembly_agent.py
+│   ├── media/
+│   │   ├── test_tts_engine.py
+│   │   └── test_video_builder.py
+│   ├── services/
+│   │   └── test_llm_factory.py
+│   ├── api/
+│   │   ├── test_health.py
+│   │   ├── test_crud_assets.py
+│   │   ├── test_crud_schedules.py
+│   │   ├── test_prompt_registry.py
+│   │   └── test_chatbot_intents.py
+│   └── test_end_to_end_pipeline.py
+│
+├── scripts/
+│   ├── run_local_pipeline.py                # quick smoke test (idea→outline→script→tts→video)
+│   ├── quick_test.py                        # minimal LLM prompt test
+│   └── seed_prompts.py                      # load default prompts into DB / filesystem
+│
+├── docker/
+│   ├── Dockerfile.api
+│   ├── Dockerfile.worker
+│   ├── nginx.conf
+│   └── Dockerfile.e2e                       # test container
+│
+├── docker-compose.yml
+├── Makefile
+├── .env.example
+├── .pre-commit-config.yaml                  # ruff/black/mypy/isort/etc
+├── README.md
+└── requirements.txt

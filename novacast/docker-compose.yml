@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.api
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=development
+      - DATABASE_URL=mongodb://db:27017/nova_cast
+      - TELEMETRY_URL=http://telemetry:8080
+    depends_on:
+      - db
+      - telemetry
+
+  worker:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.worker
+    depends_on:
+      - db
+      - api
+
+  db:
+    image: mongo:latest
+    volumes:
+      - db_data:/data/db
+
+  telemetry:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.worker
+    environment:
+      - ENV=development
+
+volumes:
+  db_data:

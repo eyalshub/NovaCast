@@ -1,0 +1,38 @@
+content_safety:
+  enabled: true
+  rules:
+    - id: profanity_filter
+      description: "Filter out profanity in user inputs."
+      action: "block"
+    - id: hate_speech_filter
+      description: "Block hate speech and discriminatory language."
+      action: "block"
+    - id: spam_filter
+      description: "Detect and block spam messages."
+      action: "block"
+
+moderation:
+  enabled: true
+  thresholds:
+    - type: "user_report"
+      action: "review"
+      threshold: 5
+    - type: "automated_detection"
+      action: "block"
+      threshold: 3
+
+user_privacy:
+  data_retention_period: "30 days"
+  user_data_access:
+    - type: "view"
+      description: "Users can view their data."
+    - type: "delete"
+      description: "Users can request deletion of their data."
+
+reporting:
+  enabled: true
+  channels:
+    - type: "email"
+      address: "support@novacast.com"
+    - type: "in_app"
+      description: "Users can report issues directly in the app."
