@@ -395,14 +395,12 @@ Includes:
 
 
 
-## Project Structure
 
 Below is the full directory layout of NovaCast.  
 This structure reflects a production-oriented, modular architecture designed for multi-agent orchestration, media generation, scheduling, and cloud deployment.
-
+##  Project Structure
 ```
 NOVACAST/
-
 ├── app/
 │   ├── main.py                          # FastAPI app + lifespan (DB/Telemetry/Worker init)
 │   │
